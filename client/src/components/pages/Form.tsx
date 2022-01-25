@@ -276,7 +276,7 @@ const Form = () => {
           data.HarvestingAges[1].value,
           data.HarvestingAges[2].value,
         ],
-        MaxNumOfHarvest: data.MaxNumOfHarvest + 1,
+        MaxNumOfHarvest: data.MaxNumOfHarvest,
         NumSearch: [3, 10000],
         Thinning: {
           YieldRate: data.Thinning.YieldRate,
