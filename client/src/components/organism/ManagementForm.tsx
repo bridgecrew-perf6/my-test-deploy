@@ -417,7 +417,7 @@ const Management: VFC<Props> = (props) => {
                     fullWidth
                     InputProps={{
                       endAdornment: (
-                        <InputAdornment position="end">年</InputAdornment>
+                        <InputAdornment position="end">回</InputAdornment>
                       ),
                     }}
                     variant="outlined"
