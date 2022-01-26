@@ -1,1 +1,0 @@
-web: java -jar OptimThinningJNI-1.0.jar
