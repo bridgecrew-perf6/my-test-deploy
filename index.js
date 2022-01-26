@@ -42,7 +42,7 @@ app.post("/api/calculation", (req, res) => {
   // xhr.abort();
   // //読み込んだファイルの確認
   // console.log(input);
-  // console.log(JSON.stringify(req.body))
+  console.log(JSON.stringify(req.body))
 
   //Javaに送って実行
   let SH_S = javaObject.runSync(JSON.stringify(req.body));
