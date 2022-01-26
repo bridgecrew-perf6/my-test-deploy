@@ -27,9 +27,9 @@ const Home: VFC<Props> = (props) => {
           <div className="home-buttons">
             {isMainPage ? (
               <>
-                <Link to="/document">
+                {/* <Link to="/document">
                   <div className="link-button">説明を見る</div>
-                </Link>
+                </Link> */}
               </>
             ) : (
               <>
