@@ -9,12 +9,6 @@ import * as yup from 'yup';
 
 const schema = yup
   .object({
-    SDMD: yup.object({
-      FormulaTreeHeight: yup
-        .number()
-        .required('必須項目です')
-        .typeError('半角数字で入力してください'),
-    }),
     Density: yup.object({
       Minimum: yup
         .number()
