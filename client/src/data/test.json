@@ -1,42 +1,53 @@
 {
-  "SDMD": {
-    "H": [72.73540819, 1, 0.004464734, 0.675717614],
-    "V": [0.074343, -1.388481, 5065.0, -2.900328],
-    "NRf": 5.38221,
-    "DBH": [-0.152130, 0.985016, -0.028142],
-    "HF": [1.273477, 0.367580, 0.140427]
-  },
-  "Density": { "Plant": [1000, 3000], "Minimum": 500 },
-  "RegenerationCost": [3290682, 275],
-  "ThinningPercent": [0, 50],
-  "AnnualInterestPercent": 0.8,
-  "HarvestingAges": [10, 110, 5],
-  "MaxNumOfHarvest": 10,
-  "Thinning": {
-    "YieldRate": 0.58,
-    "Cost": 10947,
-    "StumpHeight": 0.5,
-    "LogLength": 4,
-    "LoggingPitch": 4.1,
-    "Diameter": [6, 8, 9, 12, 14, 15, 16, 18, 22, 24, 28],
-    "Price": [8500, 8500, 9000, 9000, 9000, 15500, 15500, 19500, 19500, 17500, 17500]
-  },
-  "Clearcut": {
-    "YieldRate": 0.58,
-    "Cost": 6869,
-    "StumpHeight": 0.5,
-    "LogLength": 4,
-    "LoggingPitch": 4.1,
-    "Diameter": [6, 8, 9, 12, 14, 15, 16, 18, 22, 24, 28],
-    "Price": [8500, 8500, 9000, 9000, 9000, 15500, 15500, 19500, 19500, 17500, 17500]
-  },
-  "SA": {
-    "NumRepeat": 40,
-    "NumTempLevel": 100,
-    "NumTotalLoopN": [1, 2, 7],
-    "NumTotalLoopPow": [2.6, 4.26, 5.75],
-    "StartTemp": [0, -0.6, 0.6, 5],
-    "DiffTemp": [0, -3.8, 1.4, 5],
-    "DistScale": [0, -1.2, 0.6, 5]
+  "SH": {
+    "YieldModelType": "S",
+    "SAType": "2021",
+    "SDMD": {
+      "H": [32.8441393, -1, -0.01360109, 0.92437505],
+      "V": [0.053887, -1.183794, 7663.1, -3.20151],
+      "NRf": 5.992602,
+      "DBH": [-0.241667, 0.992603, 0],
+      "HF": [0.320738, 0.437334, 0.153257]
+    },
+    "Density": { "Plant": [500, 5000], "MinimumAtClearcut": 450 },
+    "RegenerationCost": [1953682, 375],
+    "ThinningPercent": [10, 50],
+    "AnnualInterestPercent": 0.8,
+    "HarvestingAges": [10, 200, 5],
+    "MaxNumOfHarvest": 10,
+    "NumSearch": [3, 10000],
+    "Thinning": {
+      "YieldRate": 0.58,
+      "Cost": 10947,
+      "StumpHeight": 0.5,
+      "LogLength": 4,
+      "LoggingPitch": 4.1,
+      "Diameter": [6, 8, 9, 12, 14, 15, 16, 18, 22, 24, 28],
+      "Price": [
+        9000, 9000, 9000, 9000, 9000, 12500, 12500, 13500, 13500, 14000, 14000
+      ]
+    },
+    "Clearcut": {
+      "YieldRate": 0.58,
+      "Cost": 6869,
+      "StumpHeight": 0.5,
+      "LogLength": 4,
+      "LoggingPitch": 4.1,
+      "Diameter": [6, 8, 9, 12, 14, 15, 16, 18, 22, 24, 28],
+      "Price": [
+        9000, 9000, 9000, 9000, 9000, 12500, 12500, 13500, 13500, 14000, 14000
+      ]
+    },
+    "SA": {
+      "Comment": "Type L 1000 yen/ha degradation for SEV",
+      "NumRepeat": 40,
+      "NumTempLevel": 100,
+      "MetaSearchPercentile": 0.75,
+      "NumTotalLoopN": [1, 8],
+      "NumTotalLoopPow": [3.55, 6.75],
+      "StartTemp": [0, -0.6, 0.6, 5],
+      "DiffTemp": [0, -3.8, 1.4, 5],
+      "DistScale": [0, -1.2, 0.6, 5]
+    }
   }
 }

@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable array-callback-return */
 
-import React, { useCallback, VFC } from 'react';
+import React, { useCallback, useState, VFC } from 'react';
 import {
   useForm,
   useFieldArray,
@@ -18,10 +18,14 @@ import {
   UseFormWatch,
 } from 'react-hook-form';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import TeX from '@matejmazur/react-katex';
 import { MenuItem } from '@material-ui/core';
+import exp from 'constants';
 import { FormValues } from '../../models/Form';
-import StandDensityManagementData from '../../data/StandDensityManagementData.json';
+// import StandDensityManagementData from '../../data/StandDensityManagementData.json';
+import StandDensityManagementData from '../../data/StandDensityManagementData';
+import { StandDensityManagement } from '../../models/StandDensityManagement';
 
 type Props = {
   register: UseFormRegister<FormValues>;
@@ -30,15 +34,20 @@ type Props = {
   control: Control<FormValues, object>;
   setValue: UseFormSetValue<FormValues>;
   watch: UseFormWatch<FormValues>;
+  errors: any;
 };
 
 const DensityManagement: VFC<Props> = (props) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { register, handleSubmit, control, setValue, watch } = props;
+  const { register, handleSubmit, control, setValue, watch, errors } = props;
 
   const { fields: HFields } = useFieldArray({
     control,
     name: 'SDMD.H',
+  });
+  const { fields: FormulaTreeHeight } = useFieldArray({
+    control,
+    name: 'SDMD.FormulaTreeHeight',
   });
   const { fields: VFields } = useFieldArray({ control, name: 'SDMD.V' });
   // eslint-disable-next-line
@@ -52,55 +61,63 @@ const DensityManagement: VFC<Props> = (props) => {
     name: 'SDMD.HF',
   });
 
-  const onSetValue = useCallback(
-    (e) => {
-      //  配列の数に応じて、不要なフォームを削除する
-      if (
-        // eslint-disable-next-line
-        // @ts-ignore
-        StandDensityManagementData[e.target.value].SH.SDMD.DBH.length === 2 &&
-        DBHFields.length === 3
-      ) {
-        DBHRemove(2);
-      }
-      if (
-        // eslint-disable-next-line
-        // @ts-ignore
-        StandDensityManagementData[e.target.value].SH.SDMD.HF.length === 2 &&
-        HFFields.length === 3
-      ) {
-        HFRemove(2);
-      }
+  const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+    const selectedData = StandDensityManagementData.find(
+      (v) => v.number === Number(value),
+    );
 
-      // SDMDのH,V,DBH,HFは配列なので、まとめて代入
-      // eslint-disable-next-line
-      const SDMD_Property: string[] = ['H', 'V', 'DBH', 'HF'];
-      // eslint-disable-next-line camelcase
-      SDMD_Property.map((property) => {
-        // eslint-disable-next-line
-        // @ts-ignore
-        StandDensityManagementData[e.target.value].SH.SDMD[property].map(
-          // eslint-disable-next-line array-callback-return
-          (value: number, index: number) => {
-            // eslint-disable-next-line
-            // @ts-ignore
-            setValue(`SDMD.${property}.${index}.value`, value);
-          },
-        );
-      });
-      // SDMDのNRfの値は配列ではないので、個別で代入
-      setValue(
-        `SDMD.NRf`,
-        // eslint-disable-next-line
-        // @ts-ignore
-        StandDensityManagementData[e.target.value].SH.SDMD.NRf,
-      );
-    },
-    [DBHFields.length, DBHRemove, HFFields.length, HFRemove, setValue],
-  );
+    // eslint-disable-next-line
+    // @ts-ignore
+    selectedData.SDMD.V.map((num: number, index: number) => {
+      setValue(`SDMD.V.${index}.value`, num);
+    });
+
+    // eslint-disable-next-line
+    // @ts-ignore
+    selectedData.SDMD.DBH.map((num: number, index: number) => {
+      setValue(`SDMD.DBH.${index}.value`, num);
+    });
+
+    // eslint-disable-next-line
+    // @ts-ignore
+    selectedData.SDMD.HF.map((num: number, index: number) => {
+      setValue(`SDMD.HF.${index}.value`, num);
+    });
+    // eslint-disable-next-line
+    // @ts-ignore
+    setValue(`SDMD.NRf`, selectedData.SDMD.NRf);
+  };
 
   // const watchAllFields = watch();
   const watchSdmd: any = watch('SDMD');
+  // const testtest: any = watch('test')
+  // console.log(testtest)
+
+  const treeHeightItems = ['a', 'b', 'c', 'd'];
+  const [SdmdItemsValues, setSdmdItemValue] = useState([
+    watchSdmd.H[0].value,
+    watchSdmd.H[1].value,
+    watchSdmd.H[2].value,
+    watchSdmd.H[3].value,
+  ]);
+
+  //  このコードは非常に良くないです。そして、大きいバグも潜んでいる。
+  //  react-hook-formを使うと、default-valueが部分的に(複雑な条件の時)に設定できなくなるバグがある。余裕がある時に、ライブラリを退けて、自分で作成するべし
+  const defaultTreeHeightValue = [32.84414, 0.0136, 0, 0.92438];
+
+  window.addEventListener('load', () => {
+    console.log('page is loaded');
+    // id={`FormulaTreeHeight-${index}`}
+    treeHeightItems.map((te, index) => {
+      // eslint-disable-next-line
+      // @ts-ignore
+      const element = document.getElementById(`FormulaTreeHeight-${index}`);
+      // eslint-disable-next-line
+      // @ts-ignore
+      element.defaultValue = defaultTreeHeightValue[index];
+    });
+  });
 
   return (
     <div>
@@ -109,14 +126,7 @@ const DensityManagement: VFC<Props> = (props) => {
         <div className="sdmd-items">
           <div className="input-form-items">
             <input {...register('SDMD.NRf')} className="display-none" />
-            <ul className="display-none">
-              {HFields.map((field, index) => (
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                <li key={field.id}>
-                  <input {...register(`SDMD.H.${index}.value` as const)} />
-                </li>
-              ))}
-            </ul>
+
             <ul className="display-none">
               {VFields.map((field, index) => (
                 <li key={field.id}>
@@ -143,46 +153,18 @@ const DensityManagement: VFC<Props> = (props) => {
               <div className="control-description">
                 選択することで、最適な林分材積を計算することができます。
               </div>
-              {/* <Select
-            {...register('region')}
-            options={[
-              { value: "tohoku", label: "tohoku" },
-              { value: "tohoku", label: "tohoku" },
-              { value: "tohoku", label: "tohoku" }
-            ]}
-            onChange={(e) => {
-                    onSetValue(e);
-                  }}
-          /> */}
-              <Controller
-                name="region"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="選択する"
-                    fullWidth
-                    defaultValue="minamikinnkisikokusugi"
-                    margin="normal"
-                    variant="outlined"
-                    id="select"
-                    select
-                    onChange={(e) => {
-                      onSetValue(e);
-                    }}
-                  >
-                    <MenuItem value="kyushuShikoku">九州四国地方</MenuItem>
-                    <MenuItem value="tohoku">東北地方</MenuItem>
-                    <MenuItem value="minamikinnkisikokusugi">
-                      南近畿・四国地方 スギ林分密度管理図
-                    </MenuItem>
-                    <MenuItem value="minamikinnkisikokuhinoki">
-                      南近畿・四国地方 ヒノキ林分密度管理図
-                    </MenuItem>
-                  </TextField>
-                )}
-              />
             </div>
+          </div>
+          <div className="cp_ipselect cp_sl01">
+            <select defaultValue={10} onChange={selectChange}>
+              {StandDensityManagementData.map((density, index: number) => (
+                <>
+                  <option key={density.number} value={density.number}>
+                    {density.title}
+                  </option>
+                </>
+              ))}
+            </select>
           </div>
           {watchSdmd ? (
             <>
@@ -287,6 +269,147 @@ const DensityManagement: VFC<Props> = (props) => {
           ) : (
             ''
           )}
+          <div className="treeHeightItems display-none">
+            <div className="input-form-items">
+              <div className="control-label">樹高の成長</div>
+              <div className="control-description">
+                林齢<TeX>{String.raw`t`}</TeX>における樹高
+                <TeX>{String.raw`H`}</TeX>は以下の式で表されます。
+                <div className="sdmd-katexs-items tree-height-item">
+                  <TeX>{String.raw`\color{black}H(t) = \textcolor{red}a[1-\exp\lbrace-\textcolor{red}b(t-\textcolor{red}c)\rbrace]\color{red}^d`}</TeX>
+                </div>
+                例：高知県のスギの3等地 a:62.37996, b:0.00446:, c:0, d:0.67572
+                <br /> 例：高知県のヒノキの3等地 a:32.84414, b:0.01360:, c:0,
+                d:0.92438
+              </div>
+              <div className="H-inputs">
+                {treeHeightItems.map((key, index) => (
+                  <li className="input-form-items H-input" key={key}>
+                    <p className="control-label H-input-label">
+                      {treeHeightItems[index]}
+                    </p>
+                    <Controller
+                      control={control}
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      name={`SDMD.FormulaTreeHeight.${index}.value`}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          id={`FormulaTreeHeight-${index}`}
+                          fullWidth
+                          variant="outlined"
+                          error={Boolean(
+                            errors.SDMD?.FormulaTreeHeight?.[index],
+                          )}
+                          helperText={
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                            errors.SDMD?.FormulaTreeHeight &&
+                            errors.SDMD?.FormulaTreeHeight?.[index].value
+                              .message
+                          }
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>,
+                          ) => {
+                            // setSdmdItemValue(SdmdItemsValues.splice(index, 1,e.target.value ))
+                            setSdmdItemValue(
+                              SdmdItemsValues.map((SdmdItemsValue, SdmdIndex) =>
+                                // eslint-disable-next-line
+                                SdmdIndex === index
+                                  ? e.target.value
+                                  : SdmdItemsValue,
+                              ),
+                            );
+
+                            if (index === 1) {
+                              setValue(
+                                `SDMD.H.${index}.value`,
+                                -Number(e.target.value),
+                              );
+                              // console.log(e)
+                              // eslint-disable-next-line
+                              const SdmdC = SdmdItemsValues[2];
+                              //  console.log(SdmdC * Number(e.target.value))
+                              const caluculateValue = Math.exp(
+                                SdmdC * Number(e.target.value),
+                              );
+                              setValue(
+                                `SDMD.H.1.value`,
+                                -Number(caluculateValue),
+                              );
+
+                              // if (
+                              //   // eslint-disable-next-line no-restricted-globals
+                              //   isNaN(Number(e.target.value)) ||
+                              //   e.target.value === ''
+                              // ) {
+                              //   field.onChange('');
+                              // } else {
+                              //   // eslint-disable-next-line radix
+                              //   field.onChange(parseInt(e.target.value));
+                              // }
+                            } else if (index === 2) {
+                              // eslint-disable-next-line
+                              const SdmdB = SdmdItemsValues[1];
+
+                              const caluculateValue = Math.exp(
+                                SdmdB * Number(e.target.value),
+                              );
+                              setValue(
+                                `SDMD.H.1.value`,
+                                -Number(caluculateValue),
+                              );
+                              // setValue(
+                              //   `SDMD.FormulaTreeHeight.2.value`,
+                              //   Number(e.target.value),
+                              // );
+                            } else {
+                              setValue(
+                                `SDMD.H.${index}.value`,
+                                Number(e.target.value),
+                              );
+                              // setValue(
+                              //   `SDMD.FormulaTreeHeight.${index}.value`,
+                              //   Number(e.target.value),
+                              // );
+                            }
+                          }}
+                        />
+                      )}
+                    />
+                  </li>
+                ))}
+
+                <div className="display-none">
+                  {HFields.map((HField, index) => (
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    <li className="input-form-items H-input" key={HField.id}>
+                      <p className="control-label H-input-label">
+                        {treeHeightItems[index]}
+                      </p>
+                      <Controller
+                        control={control}
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        name={`SDMD.H.${index}.value`}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            fullWidth
+                            variant="outlined"
+                            // error={Boolean(errors.H?.[index])}
+                            // helperText={
+                            //   errors.H?.[index] && errors.H?.[index].value.message
+                            // }
+                          />
+                        )}
+                      />
+                    </li>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

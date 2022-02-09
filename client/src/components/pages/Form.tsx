@@ -24,7 +24,8 @@ import schema from '../../validation/MainValidation';
 import 'katex/dist/katex.min.css';
 import Headers from './Header';
 import './Form.css';
-import StandDensityManagementData from '../../data/StandDensityManagementData.json';
+// import StandDensityManagementData from '../../data/StandDensityManagementData.json';
+import StandDensityManagementData from '../../data/StandDensityManagementData'
 import Management from '../organism/ManagementForm';
 import DensityManagement from '../organism/DensityManagement';
 import LoggingCostCalculator from '../organism/LoggingCostCalculator';
@@ -37,6 +38,11 @@ const Form = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const calculationResult = useSelector((state: RootState) => state);
   const dispatch = useDispatch<AppDispatch>();
+
+
+  const selectedKochiHinokiData = StandDensityManagementData.find(
+    (v) => v.number === Number(10),
+  );
 
   const {
     register,
@@ -52,69 +58,105 @@ const Form = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       SDMD: {
+        // FormulaTreeHeight: [
+        //   {value: 32.84414},
+        //   {value: 0.01360},
+        //   {value: 0},
+        //   {value: 0.92438}
+        // ],
         H: [
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.H[0],
+                    // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.H[0],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.H[1],
+                    // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.H[1],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.H[2],
+                    // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.H[2],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.H[3],
+                    // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.H[3],
           },
         ],
         V: [
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.V[0],
+                                // eslint-disable-next-line
+        // @ts-ignore
+            selectedKochiHinokiData.SDMD.V[0],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.V[1],
+                                // eslint-disable-next-line
+        // @ts-ignore
+            selectedKochiHinokiData.SDMD.V[1],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.V[2],
+                                // eslint-disable-next-line
+        // @ts-ignore
+            selectedKochiHinokiData.SDMD.V[2],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.V[3],
+                                // eslint-disable-next-line
+        // @ts-ignore
+            selectedKochiHinokiData.SDMD.V[3],
           },
         ],
-        NRf: StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.NRf,
+                            // eslint-disable-next-line
+        // @ts-ignore
+        NRf: selectedKochiHinokiData.SDMD.NRf,
         DBH: [
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.DBH[0],
+                                // eslint-disable-next-line
+        // @ts-ignore
+            selectedKochiHinokiData.SDMD.DBH[0],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.DBH[1],
+                                // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.DBH[1],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.DBH[2],
+                                // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.DBH[2],
           },
         ],
         HF: [
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.HF[0],
+                                // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.HF[0],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.HF[1],
+                                // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.HF[1],
           },
           {
             value:
-              StandDensityManagementData.minamikinnkisikokusugi.SH.SDMD.HF[2],
+                                // eslint-disable-next-line
+        // @ts-ignore
+              selectedKochiHinokiData.SDMD.HF[2],
           },
         ],
       },
@@ -358,7 +400,7 @@ const Form = () => {
       },
     };
 
-    // console.log(JSON.stringify(Json));
+    console.log(JSON.stringify(Json));
     // console.log(JSON.stringify(data));
     const abortCtrl = new AbortController();
     void axios
@@ -412,6 +454,7 @@ const Form = () => {
           control={control}
           setValue={setValue}
           watch={watch}
+          errors={errors}
         />
         <Management
           register={register}

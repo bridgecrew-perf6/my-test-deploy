@@ -5,6 +5,7 @@ export interface FormValues {
   SDMD: {
     NRf: number;
     H: { value: number }[];
+    FormulaTreeHeight: { value: number }[];
     V: { value: number }[];
     DBH: { value: number }[];
     HF: { value: number }[];
@@ -34,4 +35,4 @@ export interface FormValues {
     Diameter: { value: number }[];
     Price: { value: number }[];
   };
-};
+}

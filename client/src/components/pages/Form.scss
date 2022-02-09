@@ -139,7 +139,9 @@ ul {
 
     .control-label {
       display: inline-block;
+      margin-top: 10px;
       margin-bottom: 6px;
+      margin-right: 16px;
       font-size: 24px;
       color: #16191f;
     }
@@ -161,7 +163,7 @@ ul {
 }
 
 .sdmd-form-item {
-  padding: 24px;
+  padding: 24px 24px 0;
 }
 
 .sdmd-katexs-items {
@@ -189,6 +191,84 @@ ul {
       margin-bottom: 6px;
     }
   }
+}
+
+.H-inputs {
+  display: flex;
+
+}
+
+.H-input {
+  display: flex;
+  width: 200px;
+  margin-right: 16px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.treeHeightItems {
+  padding: 0 24px;
+}
+
+.H-input-labe {
+  margin-right: 16px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.cp_ipselect {
+	overflow: hidden;
+	width: 70%;
+	margin: 1em ;
+	text-align: center;
+}
+.cp_ipselect select {
+	width: 100%;
+	padding-right: 1em;
+	cursor: pointer;
+	text-indent: 0.01px;
+	text-overflow: ellipsis;
+	border: none;
+	outline: none;
+	background: transparent;
+	background-image: none;
+	box-shadow: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+.cp_ipselect select::-ms-expand {
+    display: none;
+}
+.cp_ipselect.cp_sl01 {
+	position: relative;
+	border: 1px solid #bbbbbb;
+	border-radius: 2px;
+	background: #ffffff;
+}
+.cp_ipselect.cp_sl01::before {
+	position: absolute;
+	top: 0.8em;
+	right: 0.9em;
+	width: 0;
+	height: 0;
+	padding: 0;
+	content: '';
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-top: 6px solid #666666;
+	pointer-events: none;
+}
+.cp_ipselect.cp_sl01 select {
+	padding: 8px 38px 8px 8px;
+	color: #666666;
+}
+
+.tree-height-item {
+  margin: 12px 0;
 }
 
 .field-description {

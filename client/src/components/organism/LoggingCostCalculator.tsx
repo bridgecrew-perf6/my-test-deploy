@@ -75,7 +75,7 @@ const LoggingCostCalculator: VFC<Props> = (props) => {
   const formTitleAndDescription = {
     Logging: {
       YieldRate: {
-        title: `${jploggingMethod}材のうち利用できる割合`,
+        title: `${jploggingMethod}材の歩留まり`,
         description: `${jploggingMethod}した材のうち、市場に出せる割合です`,
       },
       Cost: {
@@ -83,7 +83,7 @@ const LoggingCostCalculator: VFC<Props> = (props) => {
         description: `素材生産費と運材費の合計です`,
       },
       StumpHeight: {
-        title: `${jploggingMethod}で木を切る高さ`,
+        title: `${jploggingMethod}材の伐採高`,
         description: '林分で木を切る時の高さのことです',
       },
       LogLength: {
