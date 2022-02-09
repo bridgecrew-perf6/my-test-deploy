@@ -25,8 +25,9 @@ import 'katex/dist/katex.min.css';
 import Headers from './Header';
 import './Form.css';
 // import StandDensityManagementData from '../../data/StandDensityManagementData.json';
-import StandDensityManagementData from '../../data/StandDensityManagementData'
+import StandDensityManagementData from '../../data/StandDensityManagementData';
 import Management from '../organism/ManagementForm';
+// eslint-disable-next-line import/namespace
 import DensityManagement from '../organism/DensityManagement';
 import LoggingCostCalculator from '../organism/LoggingCostCalculator';
 import { FormValues } from '../../models/Form';
@@ -38,7 +39,6 @@ const Form = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const calculationResult = useSelector((state: RootState) => state);
   const dispatch = useDispatch<AppDispatch>();
-
 
   const selectedKochiHinokiData = StandDensityManagementData.find(
     (v) => v.number === Number(10),
@@ -58,104 +58,104 @@ const Form = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       SDMD: {
-        // FormulaTreeHeight: [
-        //   {value: 32.84414},
-        //   {value: 0.01360},
-        //   {value: 0},
-        //   {value: 0.92438}
-        // ],
+        FormulaTreeHeight: [
+          { value: 32.84414 },
+          { value: 0.0136 },
+          { value: 0 },
+          { value: 0.92438 },
+        ],
         H: [
           {
             value:
-                    // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.H[0],
           },
           {
             value:
-                    // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.H[1],
           },
           {
             value:
-                    // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.H[2],
           },
           {
             value:
-                    // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.H[3],
           },
         ],
         V: [
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
-            selectedKochiHinokiData.SDMD.V[0],
+              // eslint-disable-next-line
+              // @ts-ignore
+              selectedKochiHinokiData.SDMD.V[0],
           },
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
-            selectedKochiHinokiData.SDMD.V[1],
+              // eslint-disable-next-line
+              // @ts-ignore
+              selectedKochiHinokiData.SDMD.V[1],
           },
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
-            selectedKochiHinokiData.SDMD.V[2],
+              // eslint-disable-next-line
+              // @ts-ignore
+              selectedKochiHinokiData.SDMD.V[2],
           },
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
-            selectedKochiHinokiData.SDMD.V[3],
+              // eslint-disable-next-line
+              // @ts-ignore
+              selectedKochiHinokiData.SDMD.V[3],
           },
         ],
-                            // eslint-disable-next-line
+        // eslint-disable-next-line
         // @ts-ignore
         NRf: selectedKochiHinokiData.SDMD.NRf,
         DBH: [
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
-            selectedKochiHinokiData.SDMD.DBH[0],
+              // eslint-disable-next-line
+              // @ts-ignore
+              selectedKochiHinokiData.SDMD.DBH[0],
           },
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.DBH[1],
           },
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.DBH[2],
           },
         ],
         HF: [
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.HF[0],
           },
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.HF[1],
           },
           {
             value:
-                                // eslint-disable-next-line
-        // @ts-ignore
+              // eslint-disable-next-line
+              // @ts-ignore
               selectedKochiHinokiData.SDMD.HF[2],
           },
         ],
@@ -455,6 +455,8 @@ const Form = () => {
           setValue={setValue}
           watch={watch}
           errors={errors}
+          setError={setError}
+          clearErrors={clearErrors}
         />
         <Management
           register={register}

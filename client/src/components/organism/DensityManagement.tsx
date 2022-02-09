@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable prefer-arrow/prefer-arrow-functions */
 /* eslint-disable import/no-cycle */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -25,7 +27,6 @@ import exp from 'constants';
 import { FormValues } from '../../models/Form';
 // import StandDensityManagementData from '../../data/StandDensityManagementData.json';
 import StandDensityManagementData from '../../data/StandDensityManagementData';
-import { StandDensityManagement } from '../../models/StandDensityManagement';
 
 type Props = {
   register: UseFormRegister<FormValues>;
@@ -35,11 +36,22 @@ type Props = {
   setValue: UseFormSetValue<FormValues>;
   watch: UseFormWatch<FormValues>;
   errors: any;
+  setError: any;
+  clearErrors: any;
 };
 
 const DensityManagement: VFC<Props> = (props) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { register, handleSubmit, control, setValue, watch, errors } = props;
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    errors,
+    setError,
+    clearErrors,
+  } = props;
 
   const { fields: HFields } = useFieldArray({
     control,
@@ -102,22 +114,45 @@ const DensityManagement: VFC<Props> = (props) => {
     watchSdmd.H[3].value,
   ]);
 
+  const [TreeHeightValues, setTreeHeightValue] = useState([
+    32.84414, 0.0136, 0, 0.92438,
+  ]);
+
+  // helperText={
+  //   errors.SDMD?.FormulaTreeHeight &&
+  //   errors?.SDMD?.FormulaTreeHeight?.[index].value.message
+  // }
+
+  const tableAllErrors: string[] = [];
+  if (errors.SDMD?.FormulaTreeHeight !== undefined) {
+    errors.SDMD.FormulaTreeHeight.map((item: any, index: number) => {
+      tableAllErrors.push(item.value.message);
+    });
+  }
+
+  const tableErrors = [...new Set(tableAllErrors)];
+  // console.log(tableErrors)
+
   //  このコードは非常に良くないです。そして、大きいバグも潜んでいる。
   //  react-hook-formを使うと、default-valueが部分的に(複雑な条件の時)に設定できなくなるバグがある。余裕がある時に、ライブラリを退けて、自分で作成するべし
-  const defaultTreeHeightValue = [32.84414, 0.0136, 0, 0.92438];
+  // const defaultTreeHeightValue = [32.84414, 0.0136, 0, 0.92438];
 
-  window.addEventListener('load', () => {
-    console.log('page is loaded');
-    // id={`FormulaTreeHeight-${index}`}
-    treeHeightItems.map((te, index) => {
-      // eslint-disable-next-line
-      // @ts-ignore
-      const element = document.getElementById(`FormulaTreeHeight-${index}`);
-      // eslint-disable-next-line
-      // @ts-ignore
-      element.defaultValue = defaultTreeHeightValue[index];
-    });
-  });
+  // window.addEventListener('load', () => {
+  //   console.log('page is loaded');
+  //   // id={`FormulaTreeHeight-${index}`}
+  //   treeHeightItems.map((te, index) => {
+  //     // eslint-disable-next-line
+  //     // @ts-ignore
+  //     const element = document.getElementById(`FormulaTreeHeight-${index}`);
+  //     // eslint-disable-next-line
+  //     // @ts-ignore
+  //     element.defaultValue = defaultTreeHeightValue[index];
+  //   });
+  // });
+
+  const onChangeTreeHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('わ');
+  };
 
   return (
     <div>
@@ -269,7 +304,7 @@ const DensityManagement: VFC<Props> = (props) => {
           ) : (
             ''
           )}
-          <div className="treeHeightItems display-none">
+          <div className="treeHeightItems">
             <div className="input-form-items">
               <div className="control-label">樹高の成長</div>
               <div className="control-description">
@@ -282,12 +317,25 @@ const DensityManagement: VFC<Props> = (props) => {
                 <br /> 例：高知県のヒノキの3等地 a:32.84414, b:0.01360:, c:0,
                 d:0.92438
               </div>
+              {tableErrors.length >= 1 && (
+                <ul className="table-errors">
+                  {tableErrors.map((chartError, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <li key={index}>{chartError}</li>
+                  ))}
+                </ul>
+              )}
               <div className="H-inputs">
                 {treeHeightItems.map((key, index) => (
                   <li className="input-form-items H-input" key={key}>
                     <p className="control-label H-input-label">
                       {treeHeightItems[index]}
                     </p>
+
+                    {/* <input
+                      value={TreeHeightValues[index]}
+                      onChange={onChangeTreeHeight}
+                    /> */}
                     <Controller
                       control={control}
                       // eslint-disable-next-line
@@ -299,19 +347,47 @@ const DensityManagement: VFC<Props> = (props) => {
                           id={`FormulaTreeHeight-${index}`}
                           fullWidth
                           variant="outlined"
+                          value={TreeHeightValues[index]}
                           error={Boolean(
                             errors.SDMD?.FormulaTreeHeight?.[index],
                           )}
-                          helperText={
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                            errors.SDMD?.FormulaTreeHeight &&
-                            errors.SDMD?.FormulaTreeHeight?.[index].value
-                              .message
-                          }
+                          // helperText={
+                          //   errors.SDMD?.FormulaTreeHeight &&
+                          //   errors?.SDMD?.FormulaTreeHeight?.[index].value.message
+                          // }
                           onChange={(
                             e: React.ChangeEvent<HTMLInputElement>,
                           ) => {
                             // setSdmdItemValue(SdmdItemsValues.splice(index, 1,e.target.value ))
+
+                            function isNumber(str: any) {
+                              const reg = new RegExp(
+                                /^[+,-]?([1-9]\d*|0)(\.\d+)?$/,
+                              );
+                              const res = reg.test(str);
+
+                              return res;
+                            }
+
+                            if (isNumber(e.target.value)) {
+                              clearErrors(
+                                `SDMD.FormulaTreeHeight.${index}.value`,
+                              );
+                            } else {
+                              setError(
+                                `SDMD.FormulaTreeHeight.${index}.value`,
+                                {
+                                  type: 'manual',
+                                  message:
+                                    '半角数値で入力してください',
+                                },
+                              );
+                              console.log(
+                                errors.SDMD.FormulaTreeHeight?.[index].value
+                                  .message,
+                              );
+                            }
+
                             setSdmdItemValue(
                               SdmdItemsValues.map((SdmdItemsValue, SdmdIndex) =>
                                 // eslint-disable-next-line
@@ -320,6 +396,19 @@ const DensityManagement: VFC<Props> = (props) => {
                                   : SdmdItemsValue,
                               ),
                             );
+
+                            setTreeHeightValue(
+                              // eslint-disable-next-line
+                              // @ts-ignore
+                              TreeHeightValues.map(
+                                (treeHeightValue, setIndex: number) =>
+                                  setIndex === index
+                                    ? e.target.value
+                                    : treeHeightValue,
+                              ),
+                            );
+
+                            console.log(TreeHeightValues);
 
                             if (index === 1) {
                               setValue(
